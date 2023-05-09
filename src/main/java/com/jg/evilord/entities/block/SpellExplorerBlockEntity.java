@@ -53,6 +53,7 @@ public class SpellExplorerBlockEntity extends VinculatorBlockEntity implements I
 		this(BlockEntityRegistries.spellExplorer.get(), pos, state);
 		LogUtils.getLogger().info("Changes Test");
 		LogUtils.getLogger().info("Changes Test2");
+		LogUtils.getLogger().info("Changes Test3");
 	}
 	
 	protected SpellExplorerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
