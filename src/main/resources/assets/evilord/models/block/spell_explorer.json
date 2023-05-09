@@ -1,0 +1,12 @@
+{
+    "parent": "minecraft:block/cube",
+    "textures": {
+      "particle": "evilord:block/spell_explorer_table_front",
+      "north": "evilord:block/spell_explorer_table_front",
+      "south": "evilord:block/spell_explorer_table_side",
+      "east": "evilord:block/spell_explorer_table_side",
+      "west": "evilord:block/spell_explorer_table_side",
+      "up": "evilord:block/spell_explorer_table_top",
+      "down": "evilord:block/spell_explorer_table_bottom"
+    }
+  }

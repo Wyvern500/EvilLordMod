@@ -1,0 +1,7 @@
+{
+    "variants": {
+      "": {
+        "model": "evilord:block/spell_explorer"
+      }
+    }
+  }

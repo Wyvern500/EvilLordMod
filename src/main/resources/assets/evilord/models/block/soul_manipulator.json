@@ -1,0 +1,12 @@
+{
+    "parent": "minecraft:block/cube",
+    "textures": {
+      "particle": "evilord:block/soul_manipulator_table_front",
+      "north": "evilord:block/soul_manipulator_table_front",
+      "south": "evilord:block/soul_manipulator_table_side",
+      "east": "evilord:block/soul_manipulator_table_side",
+      "west": "evilord:block/soul_manipulator_table_side",
+      "up": "evilord:block/soul_manipulator_table_top",
+      "down": "evilord:block/soul_manipulator_table_bottom"
+    }
+  }
