@@ -8,7 +8,7 @@ import org.lwjgl.glfw.GLFW;
 
 import com.jg.evilord.Evilord;
 import com.jg.evilord.client.render.spellIcon.SpellIconRenderer;
-import com.jg.evilord.container.SpellExplorerContainer;
+import com.jg.evilord.containers.SpellExplorerContainer;
 import com.jg.evilord.spell.Spell;
 import com.jg.evilord.spell.handler.SpellsHandler;
 import com.mojang.blaze3d.systems.RenderSystem;
@@ -35,6 +35,7 @@ public class SpellExplorerScreen extends AbstractContainerScreen<SpellExplorerCo
 		super(p_97741_, p_97742_, p_97743_);
 		this.imageWidth = 201;
 		spells = new ArrayList<>(SpellsHandler.INSTANCE.getSpells());
+		//addRenderableWidget(null);
 	}
 	
 	@Override

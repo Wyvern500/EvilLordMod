@@ -3,16 +3,20 @@ package com.jg.evilord;
 import org.apache.logging.log4j.LogManager;
 import org.apache.logging.log4j.Logger;
 
+import com.jg.evilord.client.events.RegisterRecipeEvent;
 import com.jg.evilord.client.handler.ClientEventHandler;
 import com.jg.evilord.client.render.spellIcon.SpellIconRenderer;
+import com.jg.evilord.common.events.RegisterSpellEvent;
+import com.jg.evilord.common.network.SyncBlockEntityMessage;
 import com.jg.evilord.config.Config;
-import com.jg.evilord.event.common.RegisterSpellEvent;
 import com.jg.evilord.network.client.DeathEntityMessage;
-import com.jg.evilord.network.common.SyncBlockEntityMessage;
+import com.jg.evilord.network.server.CraftArtifactMessage;
+import com.jg.evilord.network.server.CraftArtifactWithSoulsMessage;
 import com.jg.evilord.network.server.DeathEntityResolutionMessage;
 import com.jg.evilord.network.server.ProcessConnectionManipulatorWandMessage;
 import com.jg.evilord.network.server.RunSpellMessage;
 import com.jg.evilord.network.server.SpawnSkeletonMessage;
+import com.jg.evilord.network.server.UpdateContainerMessage;
 import com.jg.evilord.proxy.ClientProxy;
 import com.jg.evilord.proxy.IProxy;
 import com.jg.evilord.proxy.ServerProxy;
@@ -124,11 +128,23 @@ public class Evilord {
 			channel.registerMessage(packetsRegistered++, SyncBlockEntityMessage.class, 
 					SyncBlockEntityMessage::encode, SyncBlockEntityMessage::decode, 
 					SyncBlockEntityMessage::handle);
+			channel.registerMessage(packetsRegistered++, CraftArtifactMessage.class, 
+					CraftArtifactMessage::encode, CraftArtifactMessage::decode, 
+					CraftArtifactMessage::handle);
+			channel.registerMessage(packetsRegistered++, CraftArtifactWithSoulsMessage.class, 
+					CraftArtifactWithSoulsMessage::encode, CraftArtifactWithSoulsMessage::decode, 
+					CraftArtifactWithSoulsMessage::handle);
+			channel.registerMessage(packetsRegistered++, UpdateContainerMessage.class, 
+					UpdateContainerMessage::encode, UpdateContainerMessage::decode, 
+					UpdateContainerMessage::handle);
 		});
 	}
 	
 	private void doClientStuff(final FMLClientSetupEvent event) {
+		LogUtils.getLogger().info("ClientSetupEvent");
 		ClientEventHandler.setup();
+		MinecraftForge.EVENT_BUS.start();
+		MinecraftForge.EVENT_BUS.post(new RegisterRecipeEvent());
 	}
 	
 	private void registerEntityAttributes(EntityAttributeCreationEvent e) {

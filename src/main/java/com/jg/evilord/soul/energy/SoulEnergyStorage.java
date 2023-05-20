@@ -1,5 +1,7 @@
 package com.jg.evilord.soul.energy;
 
+import com.mojang.logging.LogUtils;
+
 import net.minecraft.nbt.CompoundTag;
 
 public class SoulEnergyStorage implements ISoulEnergyStorage {
@@ -55,9 +57,15 @@ public class SoulEnergyStorage implements ISoulEnergyStorage {
         int energyExtracted = Math.min(energy, Math.min(this.maxExtract, maxExtract));
         if (!simulate)
             energy -= energyExtracted;
+        LogUtils.getLogger().info("Current energy");
         return energyExtracted;
     }
 
+    @Override
+    public void setSoulEnergy(int energy) {
+    	this.energy = energy;
+    }
+    
     @Override
     public int getEnergyStored()
     {

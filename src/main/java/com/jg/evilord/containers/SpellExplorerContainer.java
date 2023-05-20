@@ -1,4 +1,4 @@
-package com.jg.evilord.container;
+package com.jg.evilord.containers;
 
 import com.jg.evilord.registries.ContainerRegistries;
 

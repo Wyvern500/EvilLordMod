@@ -1,7 +1,7 @@
 package com.jg.evilord.client.screens;
 
 import com.jg.evilord.Evilord;
-import com.jg.evilord.container.SoulManipulatorContainer;
+import com.jg.evilord.containers.SoulManipulatorContainer;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 

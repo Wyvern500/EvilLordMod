@@ -1,4 +1,4 @@
-package com.jg.evilord.event.common;
+package com.jg.evilord.common.events;
 
 import com.jg.evilord.spell.Spell;
 import com.jg.evilord.spell.handler.SpellsHandler;

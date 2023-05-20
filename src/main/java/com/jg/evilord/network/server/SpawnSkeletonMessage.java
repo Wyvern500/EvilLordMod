@@ -1,10 +1,8 @@
 package com.jg.evilord.network.server;
 
 import java.util.function.Supplier;
-import java.util.logging.Logger;
 
 import com.jg.evilord.utils.NBTUtils;
-import com.mojang.logging.LogUtils;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;

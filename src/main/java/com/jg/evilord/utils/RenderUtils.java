@@ -193,6 +193,7 @@ public class RenderUtils {
 
 		Minecraft.getInstance().getItemRenderer().render(p_191962_1_, ItemTransforms.TransformType.GUI, false,
 				posestack1, multibuffersource$buffersource, 15728880, OverlayTexture.NO_OVERLAY, p_191962_4_);
+		
 		multibuffersource$buffersource.endBatch();
 		RenderSystem.enableDepthTest();
 		if (flag) {

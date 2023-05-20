@@ -2,7 +2,7 @@ package com.jg.evilord.block.blocks;
 
 import javax.annotation.Nullable;
 
-import com.jg.evilord.container.SoulManipulatorContainer;
+import com.jg.evilord.containers.SoulManipulatorContainer;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
@@ -43,12 +43,12 @@ public class SoulManipulatorBlock extends Block {
 		super.createBlockStateDefinition(builder);
 		builder.add(BlockStateProperties.HORIZONTAL_FACING);
 	}
-
+	
 	@Override
 	public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn,
 			BlockHitResult hit) {
 		if (!worldIn.isClientSide) {
-			NetworkHooks.openGui((ServerPlayer) player, this.getMenuProvider(state, worldIn, pos));
+			NetworkHooks.openGui((ServerPlayer) player, this.getMenuProvider(state, worldIn, pos), pos);
 		}
 		return InteractionResult.SUCCESS;
 	}

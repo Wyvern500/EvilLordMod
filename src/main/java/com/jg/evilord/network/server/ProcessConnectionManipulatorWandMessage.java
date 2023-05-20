@@ -2,21 +2,14 @@ package com.jg.evilord.network.server;
 
 import java.util.function.Supplier;
 
-import com.jg.evilord.Evilord;
-import com.jg.evilord.entities.block.VinculatorBlockEntity;
-import com.jg.evilord.network.common.SyncBlockEntityMessage;
+import com.jg.evilord.entities.block.BinderBlockEntity;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.level.block.entity.BlockEntity;
-import net.minecraft.world.level.chunk.LevelChunk;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.network.NetworkEvent.Context;
-import net.minecraftforge.network.PacketDistributor;
 
 public class ProcessConnectionManipulatorWandMessage {
 
@@ -66,24 +59,15 @@ public class ProcessConnectionManipulatorWandMessage {
 			BlockEntity be = player.level.getBlockEntity(be1Pos);
 			BlockEntity be2 = player.level.getBlockEntity(be2Pos);
 			LogUtils.getLogger().info("Executing");
-			if(be != null && be2 != null) {
-				if(be instanceof VinculatorBlockEntity && be2 instanceof VinculatorBlockEntity) {
-					((VinculatorBlockEntity)be).vinculate = String.valueOf(msg.sx) + "," + 
-							String.valueOf(msg.sy) + "," + String.valueOf(msg.sz);
-					((VinculatorBlockEntity)be2).vinculate = String.valueOf(msg.fx) + "," + 
-					String.valueOf(msg.fy) + "," + String.valueOf(msg.fz);
-					LazyOptional<IEnergyStorage> lazy = 
-							be.getCapability(CapabilityEnergy.ENERGY);
-					lazy.ifPresent((cap) -> {
-						cap.receiveEnergy(100, false);
-					});
-					Evilord.channel.send(PacketDistributor.TRACKING_CHUNK
-							.with(() -> player.level.getChunk(be1Pos.getX(), be1Pos.getZ())), 
-							new SyncBlockEntityMessage(be1Pos, be.serializeNBT()));
-					LogUtils.getLogger().info("Energy stored: " + lazy.resolve().get().getEnergyStored());
-					player.level.sendBlockUpdated(be1Pos, be.getBlockState(), be.getBlockState(), 2);
-					player.level.sendBlockUpdated(be2Pos, be2.getBlockState(), be2.getBlockState(), 2);
-				}
+			if(be instanceof BinderBlockEntity && be2 instanceof BinderBlockEntity) {
+					BinderBlockEntity vbe = ((BinderBlockEntity)be);
+					BinderBlockEntity vbe2 = ((BinderBlockEntity)be2);
+					vbe.linkWith(msg.sx, msg.sy, msg.sz);
+					vbe2.linkWith(msg.fx, msg.fy, msg.fz);
+					// player.level.sendBlockUpdated(be1Pos, be.getBlockState(), be.getBlockState(), 2);
+					// player.level.sendBlockUpdated(be2Pos, be2.getBlockState(), be2.getBlockState(), 2);
+					vbe.linkChanged(be.getBlockState(), player.level, be1Pos);
+					vbe2.linkChanged(be2.getBlockState(), player.level, be2Pos);
 			}
 		});
 		context.setPacketHandled(true);

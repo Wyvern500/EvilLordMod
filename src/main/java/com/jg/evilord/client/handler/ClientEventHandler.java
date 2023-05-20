@@ -3,25 +3,29 @@ package com.jg.evilord.client.handler;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
 
-import org.apache.commons.logging.Log;
 import org.lwjgl.glfw.GLFW;
 
 import com.jg.evilord.Evilord;
 import com.jg.evilord.animation.model.ModelsHandler;
+import com.jg.evilord.client.events.RegisterEasingsEvent;
+import com.jg.evilord.client.events.RegisterModelEvent;
+import com.jg.evilord.client.events.RegisterRecipeEvent;
 import com.jg.evilord.client.model.entity.GrimoireOfEvilModel;
 import com.jg.evilord.client.models.items.GrimoireOfEvilItemModel;
+import com.jg.evilord.client.recipe.EvilordRecipe;
+import com.jg.evilord.client.recipe.EvilordRecipeManager;
+import com.jg.evilord.client.render.ArtifactCrafterBlockEntityRenderer;
 import com.jg.evilord.client.render.BasicMinionSkeletonRenderer;
 import com.jg.evilord.client.render.DeadMassRenderer;
 import com.jg.evilord.client.render.SpellExplorerBlockEntityRenderer;
 import com.jg.evilord.client.screens.AnimationScreen;
+import com.jg.evilord.client.screens.ArtifactCrafterScreen;
 import com.jg.evilord.client.screens.ModelPartsScreen;
 import com.jg.evilord.client.screens.SoulManipulatorScreen;
 import com.jg.evilord.client.screens.SpellExplorerScreen;
-import com.jg.evilord.event.client.RegisterEasingsEvent;
-import com.jg.evilord.event.client.RegisterModelEvent;
+import com.jg.evilord.common.network.SyncBlockEntityMessage;
 import com.jg.evilord.item.GrimoireOfEvilItem;
 import com.jg.evilord.item.SoulContainerItem;
-import com.jg.evilord.network.common.SyncBlockEntityMessage;
 import com.jg.evilord.network.server.ProcessConnectionManipulatorWandMessage;
 import com.jg.evilord.network.server.SpawnSkeletonMessage;
 import com.jg.evilord.registries.BlockEntityRegistries;
@@ -60,6 +64,7 @@ import net.minecraft.world.entity.monster.Skeleton;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.BlockItem;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.Items;
 import net.minecraft.world.item.SpawnEggItem;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
@@ -111,6 +116,7 @@ public class ClientEventHandler {
 		
 		MenuScreens.register(ContainerRegistries.soulContainerManipulator.get(), SoulManipulatorScreen::new);
 		MenuScreens.register(ContainerRegistries.spellExplorer.get(), SpellExplorerScreen::new);
+		MenuScreens.register(ContainerRegistries.artifactCrafter.get(), ArtifactCrafterScreen::new);
 		
 		ClientRegistry.registerKeyBinding(Z);
 		ClientRegistry.registerKeyBinding(X);
@@ -121,6 +127,8 @@ public class ClientEventHandler {
 				man -> new DeadMassRenderer(man));
 		BlockEntityRenderers.register(BlockEntityRegistries.spellExplorer.get(),
 				man -> new SpellExplorerBlockEntityRenderer(man));
+		BlockEntityRenderers.register(BlockEntityRegistries.artifactCrafter.get(),
+				man -> new ArtifactCrafterBlockEntityRenderer(man));
 	}
 
 	public static void registerModEventListeners(IEventBus bus) {
@@ -145,6 +153,7 @@ public class ClientEventHandler {
 		// Custom events
 		bus.addListener(ClientEventHandler::registerJgModels);
 		bus.addListener(ClientEventHandler::registerEasings);
+		bus.addListener(ClientEventHandler::registerRecipes);
 	}
 
 	// Baked Model Event | Uso este evento para lanzar otros eventos que ocupo
@@ -191,6 +200,29 @@ public class ClientEventHandler {
 		}
 	}
 
+	private static void registerRecipes(RegisterRecipeEvent e) {
+		e.register(EvilordRecipeManager.ARTIFACTS, 
+				new EvilordRecipe(new ItemStack(Items.APPLE))
+					.add(Items.COAL, 1).add(Items.PAPER, 4).add(Items.DIAMOND, 8)
+					.add(ItemRegistries.soul.get(), 100));
+		e.register(EvilordRecipeManager.BOOKSTUFF, 
+				new EvilordRecipe(
+						new ItemStack(ItemRegistries.commonMagicInk.get(), 1))
+				.add(Items.INK_SAC, 1).add(ItemRegistries.soul.get(), 5));
+		e.register(EvilordRecipeManager.BOOKSTUFF, 
+				new EvilordRecipe(
+						new ItemStack(ItemRegistries.mediumMagicInk.get(), 1))
+				.add(Items.INK_SAC, 2).add(ItemRegistries.soul.get(), 15));
+		e.register(EvilordRecipeManager.BOOKSTUFF, 
+				new EvilordRecipe(
+						new ItemStack(ItemRegistries.superiorMagicInk.get(), 1))
+				.add(Items.INK_SAC, 2).add(ItemRegistries.soul.get(), 25));
+		e.register(EvilordRecipeManager.BOOKSTUFF, 
+				new EvilordRecipe(
+						new ItemStack(ItemRegistries.legendaryMagicInk.get(), 1))
+				.add(Items.INK_SAC, 3).add(ItemRegistries.soul.get(), 35));
+	}
+	
 	private static void registerJgModels(RegisterModelEvent e) {
 		e.register(ItemRegistries.grimoireOfEvil.get(), new GrimoireOfEvilItemModel(client));
 	}
@@ -323,6 +355,9 @@ public class ClientEventHandler {
 	private static void renderPlayerHand(RenderHandEvent e) {
 		Player player = mc.player;
 		if (player != null) {
+			/*LogUtils.getLogger().info("canCraftApple: " + EvilordRecipeManager.INSTANCE
+					.getRecipeHandler(EvilordRecipeManager.ARTIFACTS).checkRecipe(
+							Items.APPLE, player).canCraft());*/
 			ClientHandler.partialTicks = e.getPartialTicks();
 			if (e.getHand() == InteractionHand.MAIN_HAND) {
 				ItemStack stack = player.getMainHandItem();

@@ -1066,7 +1066,7 @@ public class AnimationScreen extends Screen {
 		return cycle;
 	}
 	
-	public class Pair<T, R> {
+	public static class Pair<T, R> {
 		protected T t;
 		protected R r;
 

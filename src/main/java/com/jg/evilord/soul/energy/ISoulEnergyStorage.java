@@ -8,6 +8,8 @@ public interface ISoulEnergyStorage {
 	
 	int extractEnergy(int maxExtract, boolean simulate);
 	
+	void setSoulEnergy(int energy);
+	
 	int getEnergyStored();
 	
 	int getMaxEnergyStored();

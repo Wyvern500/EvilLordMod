@@ -1,0 +1,12 @@
+{
+    "parent": "minecraft:block/cube",
+    "textures": {
+      "particle": "evilord:block/artifact_crafter_table_front",
+      "north": "evilord:block/artifact_crafter_table_front",
+      "south": "evilord:block/artifact_crafter_table_side",
+      "east": "evilord:block/artifact_crafter_table_side",
+      "west": "evilord:block/artifact_crafter_table_side",
+      "up": "evilord:block/artifact_crafter_table_top",
+      "down": "minecraft:block/oak_planks"
+    }
+  }

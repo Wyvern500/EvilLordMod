@@ -10,17 +10,20 @@ import net.minecraft.resources.ResourceLocation;
 
 public class Button extends AbstractSlot {
 
-	ResourceLocation img;
-	final int ox, oy, step;
-	boolean clicked;
-
-	public Button(Screen s, int x, int y, int ox, int oy, int w, int h, int step, ResourceLocation image) {
+	private ResourceLocation img;
+	private final int ox, oy, step;
+	private boolean clicked;
+	private OnClick onClick;
+	
+	public Button(Screen s, int x, int y, int ox, int oy, int w, int h, int step, 
+			ResourceLocation image, OnClick click) {
 		super(s, x, y, w, h);
 		this.img = image;
 		this.ox = ox;
 		this.oy = oy;
 		this.step = step;
 		this.clicked = false;
+		this.onClick = click;
 	}
 
 	@Override
@@ -56,7 +59,7 @@ public class Button extends AbstractSlot {
 	@Override
 	public void onPress() {
 		clicked = true;
-
+		onClick.click(this);
 	}
 
 	@Override
@@ -68,5 +71,31 @@ public class Button extends AbstractSlot {
 	public void updateNarration(NarrationElementOutput p_169152_) {
 
 	}
+	
+	public ResourceLocation getImg() {
+		return img;
+	}
 
+	public int getOx() {
+		return ox;
+	}
+
+	public int getOy() {
+		return oy;
+	}
+
+	public int getStep() {
+		return step;
+	}
+
+	public boolean isClicked() {
+		return clicked;
+	}
+
+
+
+	public static interface OnClick {
+		public void click(Button btn);
+	}
+	
 }

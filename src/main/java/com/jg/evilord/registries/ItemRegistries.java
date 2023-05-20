@@ -17,6 +17,9 @@ public class ItemRegistries {
 	public static final DeferredRegister<Item> ITEMS = DeferredRegister
 			.create(ForgeRegistries.ITEMS, Evilord.MODID);
 	
+	public static final RegistryObject<Item> soul = ITEMS.register("soul",
+			() -> new Item(new Item.Properties().tab(Evilord.getTab()).stacksTo(64)));
+	
 	public static final RegistryObject<Item> deathStaff = ITEMS.register("death_staff",
 			() -> new StaffItem(new Item.Properties().tab(Evilord.getTab()).stacksTo(1)));
 	
@@ -51,12 +54,32 @@ public class ItemRegistries {
 			() -> new SoulContainerItem(new Item.Properties().tab(Evilord.getTab())
 					.stacksTo(1), ContainerTier.FIVE));
 	
+	public static final RegistryObject<Item> commonMagicInk = ITEMS.register("common_magic_ink",
+			() -> new Item(new Item.Properties().tab(Evilord.getTab())
+					.stacksTo(64)));
+	
+	public static final RegistryObject<Item> mediumMagicInk = ITEMS.register("medium_magic_ink",
+			() -> new Item(new Item.Properties().tab(Evilord.getTab())
+					.stacksTo(64)));
+	
+	public static final RegistryObject<Item> superiorMagicInk = ITEMS.register("superior_magic_ink",
+			() -> new Item(new Item.Properties().tab(Evilord.getTab())
+					.stacksTo(64)));
+	
+	public static final RegistryObject<Item> legendaryMagicInk = ITEMS.register("legendary_magic_ink",
+			() -> new Item(new Item.Properties().tab(Evilord.getTab())
+					.stacksTo(64)));
+	
 	public static final RegistryObject<BlockItem> soulManipulator = ITEMS.register("soul_manipulator",
 			() -> new BlockItem(BlockRegistries.soulManipulator.get(),
 					new Item.Properties().tab(Evilord.getTab()).stacksTo(64)));
 	
 	public static final RegistryObject<BlockItem> spellExplorer = ITEMS.register("spell_explorer",
 			() -> new BlockItem(BlockRegistries.spellExplorer.get(),
+					new Item.Properties().tab(Evilord.getTab()).stacksTo(64)));
+	
+	public static final RegistryObject<BlockItem> artifactCrafter = ITEMS.register("artifact_crafter",
+			() -> new BlockItem(BlockRegistries.artifactCrafter.get(),
 					new Item.Properties().tab(Evilord.getTab()).stacksTo(64)));
 	
 }

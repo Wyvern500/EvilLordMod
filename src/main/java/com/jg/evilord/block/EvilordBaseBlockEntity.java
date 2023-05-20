@@ -2,7 +2,7 @@ package com.jg.evilord.block;
 
 import javax.annotation.Nullable;
 
-import com.jg.evilord.entities.block.VinculatorBlockEntity;
+import com.jg.evilord.entities.block.BinderBlockEntity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -48,7 +48,7 @@ public abstract class EvilordBaseBlockEntity extends BaseEntityBlock {
 	public InteractionResult use(BlockState state, Level worldIn, BlockPos pos, Player player, InteractionHand handIn,
 			BlockHitResult hit) {
 		if (!worldIn.isClientSide) {
-			NetworkHooks.openGui((ServerPlayer) player, this.getMenuProvider(state, worldIn, pos));
+			NetworkHooks.openGui((ServerPlayer) player, this.getMenuProvider(state, worldIn, pos), pos);
 		}
 		return InteractionResult.SUCCESS;
 	}
@@ -58,9 +58,9 @@ public abstract class EvilordBaseBlockEntity extends BaseEntityBlock {
 			boolean p_60519_) {
 		if (pState.getBlock() != pNewState.getBlock()) {
             BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-            if (blockEntity instanceof VinculatorBlockEntity) {
-                ((VinculatorBlockEntity) blockEntity).drops();
-                ((VinculatorBlockEntity) blockEntity).vinculationChanged(pState, pLevel, 
+            if (blockEntity instanceof BinderBlockEntity) {
+                ((BinderBlockEntity) blockEntity).drops();
+                ((BinderBlockEntity) blockEntity).linkChanged(pState, pLevel, 
                 		pPos);
             }
         }

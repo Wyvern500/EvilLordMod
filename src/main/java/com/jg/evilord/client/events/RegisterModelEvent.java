@@ -1,4 +1,4 @@
-package com.jg.evilord.event.client;
+package com.jg.evilord.client.events;
 
 import java.util.Map;
 

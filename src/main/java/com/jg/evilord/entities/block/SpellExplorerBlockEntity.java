@@ -2,22 +2,16 @@ package com.jg.evilord.entities.block;
 
 import javax.annotation.Nonnull;
 
-import com.jg.evilord.container.SpellExplorerContainer;
+import com.jg.evilord.containers.SpellExplorerContainer;
 import com.jg.evilord.entities.block.inventory.SimpleBlockEntityInventory;
 import com.jg.evilord.registries.BlockEntityRegistries;
 import com.jg.evilord.soul.energy.ISoulEnergyStorage;
 import com.jg.evilord.soul.energy.SoulEnergyStorage;
-import com.jg.evilord.soul.energy.SoulStorage;
-import com.jg.evilord.utils.EnergyUtils;
-import com.mojang.datafixers.types.templates.Tag.TagType;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.nbt.IntTag;
-import net.minecraft.nbt.Tag;
-import net.minecraft.nbt.TagTypes;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
@@ -35,12 +29,10 @@ import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraftforge.common.capabilities.Capability;
 import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.energy.CapabilityEnergy;
-import net.minecraftforge.energy.IEnergyStorage;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
-public class SpellExplorerBlockEntity extends VinculatorBlockEntity implements IEnergyCapableBlockEntity {
+public class SpellExplorerBlockEntity extends BinderBlockEntity {
 
 	private static final Component CONTAINER_TITLE = new TranslatableComponent(
 			"com.jg.container.spell_explorer_container");
@@ -51,12 +43,11 @@ public class SpellExplorerBlockEntity extends VinculatorBlockEntity implements I
 
 	public SpellExplorerBlockEntity(BlockPos pos, BlockState state) {
 		this(BlockEntityRegistries.spellExplorer.get(), pos, state);
-		LogUtils.getLogger().info("Changes Test on test");
 	}
 	
 	protected SpellExplorerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
 		super(type, pos, state);
-		this.vinculate = "";
+		this.link = null;
 		inv = new SimpleBlockEntityInventory(4);
 		this.soulEnergyStorage = new SoulEnergyStorage(100);
 	}
@@ -86,7 +77,7 @@ public class SpellExplorerBlockEntity extends VinculatorBlockEntity implements I
 	protected void saveAdditional(CompoundTag tag) {
 		tag.put("inventory", inv.serializeNBT());
 		tag.put("soul_energy_storage", soulEnergyStorage.serializeNBT());
-		tag.putString(VINCULATE, vinculate);
+		tag.putString(LINK, link);
 		super.saveAdditional(tag);
 	}
 	
@@ -95,7 +86,7 @@ public class SpellExplorerBlockEntity extends VinculatorBlockEntity implements I
 		super.load(nbt);
 		inv.deserializeNBT(nbt.getCompound("inventory"));
 		soulEnergyStorage.deserializeNBT(nbt.getCompound("soul_energy_storage"));
-		vinculate = nbt.getString(VINCULATE);
+		link = nbt.getString(LINK);
 	}
 	
 	@Override
@@ -137,7 +128,7 @@ public class SpellExplorerBlockEntity extends VinculatorBlockEntity implements I
 	@Override
 	public void deserializeNBT(CompoundTag nbt) {
 		super.deserializeNBT(nbt);
-		LogUtils.getLogger().info("Vinculate: " + nbt.getString(VINCULATE));
+		LogUtils.getLogger().info("Vinculate: " + nbt.getString(LINK));
 	}
 
 	@Override
@@ -200,15 +191,15 @@ public class SpellExplorerBlockEntity extends VinculatorBlockEntity implements I
 	}
 
 	@Override
-	public void vinculationChanged(BlockState state, Level level, BlockPos pos) {
-		String[] sData = serializeNBT().getString(VINCULATE).split(",");
+	public void linkChanged(BlockState state, Level level, BlockPos pos) {
+		String[] sData = serializeNBT().getString(LINK).split(",");
 		if(sData.length == 0) return;
 		if(sData[0].equals("")) return;
 		BlockPos bePos = new BlockPos(Integer.parseInt(sData[0]), Integer.parseInt(sData[1]),
 				Integer.parseInt(sData[2]));
 		BlockEntity be = level.getBlockEntity(bePos);
 		if(be != null) {
-			((VinculatorBlockEntity)be).vinculate = "";
+			((BinderBlockEntity)be).unbind();
 		}
 	}
 
