@@ -1,5 +1,6 @@
 package com.jg.evilord.utils;
 
+import java.util.List;
 import java.util.Random;
 
 import org.lwjgl.opengl.GL11;
@@ -22,18 +23,23 @@ import com.mojang.math.Vector3f;
 
 import net.minecraft.client.Camera;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.player.AbstractClientPlayer;
 import net.minecraft.client.renderer.GameRenderer;
 import net.minecraft.client.renderer.MultiBufferSource;
 import net.minecraft.client.renderer.RenderStateShard;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.block.model.ItemTransforms;
+import net.minecraft.client.renderer.entity.ItemRenderer;
 import net.minecraft.client.renderer.entity.player.PlayerRenderer;
 import net.minecraft.client.renderer.texture.OverlayTexture;
 import net.minecraft.client.renderer.texture.TextureAtlas;
 import net.minecraft.client.renderer.texture.TextureAtlasSprite;
 import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
+import net.minecraft.network.chat.Component;
+import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.util.Mth;
 import net.minecraft.world.entity.HumanoidArm;
@@ -58,6 +64,139 @@ public class RenderUtils {
       }
 	 */
 	
+	// Tootltip
+	
+	public static void renderTooltip(PoseStack stack, List<Component> components, int x, int y) {
+		List<ClientTooltipComponent> list = 
+				net.minecraftforge.client.ForgeHooksClient
+				.gatherTooltipComponents(ItemStack.EMPTY, 
+						components, 
+						ItemStack.EMPTY.getTooltipImage(), 
+						x, Minecraft.getInstance().getWindow()
+						.getGuiScaledWidth(), 
+						Minecraft.getInstance().getWindow()
+						.getGuiScaledHeight(), Minecraft.getInstance().font, 
+						Minecraft.getInstance().font);
+		renderTooltipInternal(stack, list, x, y);
+	}
+	
+	public static void renderTooltipInternal(PoseStack stack, List<ClientTooltipComponent> components, int x, int y) {
+		if (!components.isEmpty()) {
+			// net.minecraftforge.client.event.RenderTooltipEvent.Pre preEvent =
+			// net.minecraftforge.client.ForgeHooksClient.onRenderTooltipPre(this.tooltipStack,
+			// stack, p_169386_, p_169387_, width, height, components, this.tooltipFont,
+			// this.font);
+			// if (preEvent.isCanceled()) return;
+			Font font = Minecraft.getInstance().font;
+			ItemRenderer itemRenderer = Minecraft.getInstance().getItemRenderer();
+			int i = 0;
+			int j = components.size() == 1 ? -2 : 0;
+
+			for (ClientTooltipComponent clienttooltipcomponent : components) {
+				int k = clienttooltipcomponent.getWidth(font);
+				if (k > i) {
+					i = k;
+				}
+
+				j += clienttooltipcomponent.getHeight();
+			}
+
+			int j2 = x + 12;
+			int k2 = y - 12;
+			/*
+			 * if (j2 + i > this.width) { j2 -= 28 + i; }
+			 * 
+			 * if (k2 + j + 6 > this.height) { k2 = this.height - j - 6; }
+			 */
+
+			stack.pushPose();
+			/*int l = -267386864;
+			int i1 = 1347420415;
+			int j1 = 1344798847;
+			int k1 = 400;*/
+			float f = itemRenderer.blitOffset;
+			itemRenderer.blitOffset = 400.0F;
+			Tesselator tesselator = Tesselator.getInstance();
+			BufferBuilder bufferbuilder = tesselator.getBuilder();
+			RenderSystem.setShader(GameRenderer::getPositionColorShader);
+			bufferbuilder.begin(VertexFormat.Mode.QUADS, DefaultVertexFormat.POSITION_COLOR);
+			int backgroundStart = 0xf0100010;
+			int borderStart = 0x505000FF;
+			int borderEnd = 0x5028007f;
+			Matrix4f matrix4f = stack.last().pose();
+			fillGradient(matrix4f, bufferbuilder, j2 - 3, k2 - 4, j2 + i + 3, k2 - 3, 400, backgroundStart,
+					backgroundStart);
+			fillGradient(matrix4f, bufferbuilder, j2 - 3, k2 + j + 3, j2 + i + 3, k2 + j + 4, 400, backgroundStart,
+					backgroundStart);
+			fillGradient(matrix4f, bufferbuilder, j2 - 3, k2 - 3, j2 + i + 3, k2 + j + 3, 400, backgroundStart,
+					backgroundStart);
+			fillGradient(matrix4f, bufferbuilder, j2 - 4, k2 - 3, j2 - 3, k2 + j + 3, 400, backgroundStart,
+					backgroundStart);
+			fillGradient(matrix4f, bufferbuilder, j2 + i + 3, k2 - 3, j2 + i + 4, k2 + j + 3, 400, backgroundStart,
+					backgroundStart);
+			fillGradient(matrix4f, bufferbuilder, j2 - 3, k2 - 3 + 1, j2 - 3 + 1, k2 + j + 3 - 1, 400, borderStart,
+					borderEnd);
+			fillGradient(matrix4f, bufferbuilder, j2 + i + 2, k2 - 3 + 1, j2 + i + 3, k2 + j + 3 - 1, 400, borderStart,
+					borderEnd);
+			fillGradient(matrix4f, bufferbuilder, j2 - 3, k2 - 3, j2 + i + 3, k2 - 3 + 1, 400, borderStart,
+					borderStart);
+			fillGradient(matrix4f, bufferbuilder, j2 - 3, k2 + j + 2, j2 + i + 3, k2 + j + 3, 400, borderEnd,
+					borderEnd);
+			RenderSystem.enableDepthTest();
+			RenderSystem.disableTexture();
+			RenderSystem.enableBlend();
+			RenderSystem.defaultBlendFunc();
+			bufferbuilder.end();
+			BufferUploader.end(bufferbuilder);
+			RenderSystem.disableBlend();
+			RenderSystem.enableTexture();
+			MultiBufferSource.BufferSource multibuffersource$buffersource = MultiBufferSource
+					.immediate(Tesselator.getInstance().getBuilder());
+			stack.translate(0.0D, 0.0D, 400.0D);
+			int l1 = k2;
+
+			for (int i2 = 0; i2 < components.size(); ++i2) {
+				ClientTooltipComponent clienttooltipcomponent1 = components.get(i2);
+				clienttooltipcomponent1.renderText(font, j2, l1, matrix4f, multibuffersource$buffersource);
+				l1 += clienttooltipcomponent1.getHeight() + (i2 == 0 ? 2 : 0);
+			}
+
+			multibuffersource$buffersource.endBatch();
+			stack.popPose();
+			l1 = k2;
+
+			for (int l2 = 0; l2 < components.size(); ++l2) {
+				ClientTooltipComponent clienttooltipcomponent2 = components.get(l2);
+				clienttooltipcomponent2.renderImage(font, j2, l1, stack, itemRenderer, 400);
+				l1 += clienttooltipcomponent2.getHeight() + (l2 == 0 ? 2 : 0);
+			}
+
+			itemRenderer.blitOffset = f;
+		}
+	}
+
+	protected static void fillGradient(Matrix4f p_93124_, BufferBuilder p_93125_, int p_93126_, int p_93127_,
+			int p_93128_, int p_93129_, int p_93130_, int p_93131_, int p_93132_) {
+		float f = (float) (p_93131_ >> 24 & 255) / 255.0F;
+		float f1 = (float) (p_93131_ >> 16 & 255) / 255.0F;
+		float f2 = (float) (p_93131_ >> 8 & 255) / 255.0F;
+		float f3 = (float) (p_93131_ & 255) / 255.0F;
+		float f4 = (float) (p_93132_ >> 24 & 255) / 255.0F;
+		float f5 = (float) (p_93132_ >> 16 & 255) / 255.0F;
+		float f6 = (float) (p_93132_ >> 8 & 255) / 255.0F;
+		float f7 = (float) (p_93132_ & 255) / 255.0F;
+		p_93125_.vertex(p_93124_, (float) p_93128_, (float) p_93127_, (float) p_93130_).color(f1, f2, f3, f)
+				.endVertex();
+		p_93125_.vertex(p_93124_, (float) p_93126_, (float) p_93127_, (float) p_93130_).color(f1, f2, f3, f)
+				.endVertex();
+		p_93125_.vertex(p_93124_, (float) p_93126_, (float) p_93129_, (float) p_93130_).color(f5, f6, f7, f4)
+				.endVertex();
+		p_93125_.vertex(p_93124_, (float) p_93128_, (float) p_93129_, (float) p_93130_).color(f5, f6, f7, f4)
+				.endVertex();
+	}
+	
+	// RenderTypes
+	
 	public static RenderType TEST = RenderType.create("test", DefaultVertexFormat.POSITION_COLOR,
 			VertexFormat.Mode.QUADS, 256, false, true,
 			RenderType.CompositeState.builder()
@@ -81,6 +220,8 @@ public class RenderUtils {
 
 					})).createCompositeState(false));
 
+	// Player Rendering
+	
 	public static void renderPlayerArm(PoseStack matrix, MultiBufferSource buffer, int light, float p_109350_,
 			float p_109351_, HumanoidArm p_109352_) {
 		boolean flag = p_109352_ != HumanoidArm.LEFT;
@@ -319,6 +460,11 @@ public class RenderUtils {
 	public static void renderBlock(VertexConsumer buffer, PoseStack matrix, BlockPos pos, float a) {
 		renderBlock(buffer, matrix, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, 0.5f, 0.5f, 0.5f, 0.0f,
 				1.0f, 0.0f, a);
+	}
+	
+	public static void renderBlock(VertexConsumer buffer, PoseStack matrix, BlockPos pos, float r, float g, float b, float a) {
+		renderBlock(buffer, matrix, pos.getX() + 0.5f, pos.getY() + 0.5f, pos.getZ() + 0.5f, 0.5f, 0.5f, 0.5f, r,
+				g, b, a);
 	}
 
 	public static void renderBlock(VertexConsumer buffer, PoseStack matrix, float x, float y, float z, float a) {

@@ -102,8 +102,8 @@ public class ArtifactCrafterScreen extends SoulEnergyCapableScreen<ArtifactCraft
 		
 		// Soul storage
 		this.blit(matrixStack, i + 143, j + 30, 178, 46, 11, 12);
-		this.font.draw(matrixStack, this.menu.getData().get(0) + "", i + 149, j + 36, 
-				0xffffff);
+		this.font.draw(matrixStack, this.menu.getData().get(1) + "", i + 149, 
+				j + 36, 0xffffff);
 	}
 	
 	@Override

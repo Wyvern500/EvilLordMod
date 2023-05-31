@@ -2,7 +2,9 @@ package com.jg.evilord.registries;
 
 import com.jg.evilord.Evilord;
 import com.jg.evilord.containers.ArtifactCrafterContainer;
+import com.jg.evilord.containers.TestGeneratorContainer;
 import com.jg.evilord.containers.SoulManipulatorContainer;
+import com.jg.evilord.containers.SoulStorageContainer;
 import com.jg.evilord.containers.SpellExplorerContainer;
 import com.mojang.logging.LogUtils;
 
@@ -32,13 +34,21 @@ public class ContainerRegistries {
 			CONTAINERS.register("artifact_crafter", 
 					() -> 
 			new MenuType<>((IContainerFactory<ArtifactCrafterContainer>)(windowId, inv, data) -> {
-						if(data == null) {
-							LogUtils.getLogger().info("Data is null");
-						} else {
-							LogUtils.getLogger().info("Data is not null: " + 
-									data.toString());
-						}
 						return new ArtifactCrafterContainer(windowId, inv, data);
+					}));
+	
+	public static final RegistryObject<MenuType<SoulStorageContainer>> soulStorage = 
+			CONTAINERS.register("soul_storage", 
+					() -> 
+			new MenuType<>((IContainerFactory<SoulStorageContainer>)(windowId, inv, data) -> {
+						return new SoulStorageContainer(windowId, inv, data);
+					}));
+	
+	public static final RegistryObject<MenuType<TestGeneratorContainer>> testGenerator = 
+			CONTAINERS.register("test_generator_container", 
+					() -> 
+			new MenuType<>((IContainerFactory<TestGeneratorContainer>)(windowId, inv, data) -> {
+						return new TestGeneratorContainer(windowId, inv, data);
 					}));
 	
 	

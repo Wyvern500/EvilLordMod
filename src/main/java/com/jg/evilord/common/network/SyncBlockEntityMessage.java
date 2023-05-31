@@ -4,7 +4,7 @@ import java.util.Objects;
 import java.util.function.Supplier;
 
 import com.jg.evilord.Evilord;
-import com.jg.evilord.entities.block.BinderBlockEntity;
+import com.jg.evilord.entities.block.AbstractBinderBlockEntity;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.core.BlockPos;
@@ -54,8 +54,8 @@ public class SyncBlockEntityMessage {
 				BlockPos pos = new BlockPos(msg.x, msg.y, msg.z);
 				if(world.isLoaded(pos)) {
 					BlockEntity tile = world.getBlockEntity(pos);
-					if(tile instanceof BinderBlockEntity)
-						((BinderBlockEntity)tile).receiveMessageFromClient(msg.nbt);
+					if(tile instanceof AbstractBinderBlockEntity<?>)
+						((AbstractBinderBlockEntity<?>)tile).receiveMessageFromClient(msg.nbt);
 				}
 			});
 		} else {
@@ -64,8 +64,8 @@ public class SyncBlockEntityMessage {
 				LogUtils.getLogger().info("Client");
 				if(world!=null) { // This can happen if the task is scheduled right before leaving the world
 					BlockEntity tile = world.getBlockEntity(new BlockPos(msg.x, msg.y, msg.z));
-					if(tile instanceof BinderBlockEntity)
-						((BinderBlockEntity)tile).receiveMessageFromServer(msg.nbt);
+					if(tile instanceof AbstractBinderBlockEntity<?>)
+						((AbstractBinderBlockEntity<?>)tile).receiveMessageFromServer(msg.nbt);
 				}
 			});
 		}

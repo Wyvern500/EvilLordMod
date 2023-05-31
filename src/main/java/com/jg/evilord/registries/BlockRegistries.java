@@ -2,7 +2,9 @@ package com.jg.evilord.registries;
 
 import com.jg.evilord.Evilord;
 import com.jg.evilord.block.blocks.ArtifactCrafterBlock;
+import com.jg.evilord.block.blocks.SoulEnergyGeneratorTestingBlock;
 import com.jg.evilord.block.blocks.SoulManipulatorBlock;
+import com.jg.evilord.block.blocks.SoulStorageBlock;
 import com.jg.evilord.block.blocks.SpellExplorerBlock;
 
 import net.minecraft.world.level.block.Block;
@@ -28,6 +30,14 @@ public class BlockRegistries {
 	
 	public static RegistryObject<Block> artifactCrafter = BLOCKS.register("artifact_crafter",
 			() -> new ArtifactCrafterBlock(BlockBehaviour.Properties.of(Material.HEAVY_METAL).strength(2.0F, 3.0F)
+					.strength(2).sound(SoundType.METAL)));
+	
+	public static RegistryObject<Block> soulStorage = BLOCKS.register("soul_storage",
+			() -> new SoulStorageBlock(BlockBehaviour.Properties.of(Material.HEAVY_METAL).strength(2.0F, 3.0F)
+					.strength(2).sound(SoundType.METAL)));
+	
+	public static RegistryObject<Block> testGenerator = BLOCKS.register("test_generator",
+			() -> new SoulEnergyGeneratorTestingBlock(BlockBehaviour.Properties.of(Material.HEAVY_METAL).strength(2.0F, 3.0F)
 					.strength(2).sound(SoundType.METAL)));
 	
 }

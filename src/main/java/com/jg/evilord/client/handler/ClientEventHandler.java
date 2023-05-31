@@ -1,8 +1,11 @@
 package com.jg.evilord.client.handler;
 
+import java.util.List;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
+import java.util.stream.Collectors;
 
+import org.checkerframework.checker.units.qual.min;
 import org.lwjgl.glfw.GLFW;
 
 import com.jg.evilord.Evilord;
@@ -17,12 +20,16 @@ import com.jg.evilord.client.recipe.EvilordRecipeManager;
 import com.jg.evilord.client.render.ArtifactCrafterBlockEntityRenderer;
 import com.jg.evilord.client.render.BasicMinionSkeletonRenderer;
 import com.jg.evilord.client.render.DeadMassRenderer;
+import com.jg.evilord.client.render.SoulStorageBlockEntityRenderer;
 import com.jg.evilord.client.render.SpellExplorerBlockEntityRenderer;
+import com.jg.evilord.client.render.TestGeneratorBlockEntityRenderer;
 import com.jg.evilord.client.screens.AnimationScreen;
 import com.jg.evilord.client.screens.ArtifactCrafterScreen;
 import com.jg.evilord.client.screens.ModelPartsScreen;
 import com.jg.evilord.client.screens.SoulManipulatorScreen;
+import com.jg.evilord.client.screens.SoulStorageScreen;
 import com.jg.evilord.client.screens.SpellExplorerScreen;
+import com.jg.evilord.client.screens.TestGeneratorScreen;
 import com.jg.evilord.common.network.SyncBlockEntityMessage;
 import com.jg.evilord.item.GrimoireOfEvilItem;
 import com.jg.evilord.item.SoulContainerItem;
@@ -42,9 +49,11 @@ import com.mojang.math.Matrix4f;
 
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -78,6 +87,7 @@ import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.EntityRenderersEvent.RegisterLayerDefinitions;
 import net.minecraftforge.client.event.InputEvent;
 import net.minecraftforge.client.event.ModelBakeEvent;
+import net.minecraftforge.client.event.RenderGameOverlayEvent;
 import net.minecraftforge.client.event.RenderHandEvent;
 import net.minecraftforge.client.event.RenderLevelLastEvent;
 import net.minecraftforge.client.event.RenderLevelStageEvent;
@@ -117,6 +127,8 @@ public class ClientEventHandler {
 		MenuScreens.register(ContainerRegistries.soulContainerManipulator.get(), SoulManipulatorScreen::new);
 		MenuScreens.register(ContainerRegistries.spellExplorer.get(), SpellExplorerScreen::new);
 		MenuScreens.register(ContainerRegistries.artifactCrafter.get(), ArtifactCrafterScreen::new);
+		MenuScreens.register(ContainerRegistries.soulStorage.get(), SoulStorageScreen::new);
+		MenuScreens.register(ContainerRegistries.testGenerator.get(), TestGeneratorScreen::new);
 		
 		ClientRegistry.registerKeyBinding(Z);
 		ClientRegistry.registerKeyBinding(X);
@@ -129,6 +141,10 @@ public class ClientEventHandler {
 				man -> new SpellExplorerBlockEntityRenderer(man));
 		BlockEntityRenderers.register(BlockEntityRegistries.artifactCrafter.get(),
 				man -> new ArtifactCrafterBlockEntityRenderer(man));
+		BlockEntityRenderers.register(BlockEntityRegistries.soulStorage.get(),
+				man -> new SoulStorageBlockEntityRenderer(man));
+		BlockEntityRenderers.register(BlockEntityRegistries.testGenerator.get(), 
+				man -> new TestGeneratorBlockEntityRenderer(man));
 	}
 
 	public static void registerModEventListeners(IEventBus bus) {
@@ -149,6 +165,10 @@ public class ClientEventHandler {
 		bus.addListener(ClientEventHandler::renderLast);
 		bus.addListener(ClientEventHandler::renderStage);
 		bus.addListener(ClientEventHandler::registerEntityModels);
+		bus.addListener(ClientEventHandler::renderHudPre);
+		bus.addListener(ClientEventHandler::renderHudPost);
+		bus.addListener(ClientEventHandler::renderHudPreLayer);
+		bus.addListener(ClientEventHandler::renderHudPostLayer);
 		
 		// Custom events
 		bus.addListener(ClientEventHandler::registerJgModels);
@@ -177,8 +197,8 @@ public class ClientEventHandler {
 			if (player != null) {
 				ItemStack stack = player.getMainHandItem();
 				
+				client.tick();
 				if(stack.getItem() instanceof GrimoireOfEvilItem) {
-					client.tick();
 					client.selectJgModel();
 				}
 			}
@@ -350,6 +370,68 @@ public class ClientEventHandler {
 			e.addSprite(new ResourceLocation(Evilord.MODID, "entity/bookmodel"));
 			LogUtils.getLogger().info("Adding custom textures");
 		}
+	}
+	
+	private static void renderHudPre(RenderGameOverlayEvent.Pre e) {
+		/*List<ClientTooltipComponent> list = 
+				net.minecraftforge.client.ForgeHooksClient
+				.gatherTooltipComponents(ItemStack.EMPTY, 
+						List.of(new TranslatableComponent("Hola que ase")), 
+						ItemStack.EMPTY.getTooltipImage(), 
+						100, 1000, 1000, Minecraft.getInstance().font, 
+						Minecraft.getInstance().font);
+		RenderUtils.renderTooltipInternal(e.getMatrixStack(), 
+				list, 100, 100);*/
+	}
+	
+	private static void renderHudPost(RenderGameOverlayEvent.Post e) {
+		/*List<ClientTooltipComponent> list = 
+				net.minecraftforge.client.ForgeHooksClient
+				.gatherTooltipComponents(ItemStack.EMPTY, 
+						List.of(new TranslatableComponent("Hola que ase")), 
+						ItemStack.EMPTY.getTooltipImage(), 
+						100, 1000, 1000, Minecraft.getInstance().font, 
+						Minecraft.getInstance().font);
+		RenderUtils.renderTooltipInternal(e.getMatrixStack(), 
+				list, 100, 100);*/
+	}
+	
+	private static void renderHudPreLayer(RenderGameOverlayEvent.PreLayer e) {
+		client.renderOverlayPreLayer(e.getMatrixStack());
+		Player player = mc.player;
+		if(player != null) {
+			if(player.getMainHandItem().getItem() == ItemRegistries.connectionManipulatorWand.get()) {
+				String mode = "";
+				switch(client
+						.getConnectionManipulator().getMode()) {
+				case 0:
+					mode = "Add";
+					break;
+				case 1:
+					mode = "Remove";
+					break;
+				case 2:
+					mode = "Info";
+					break;
+				}
+				mc.font.draw(e.getMatrixStack(), 
+						new TranslatableComponent("Mode: " + mode), 20, 
+						mc.getWindow()
+						.getGuiScaledHeight() - 40, 0xffffff);
+			}
+		}
+	}
+	
+	private static void renderHudPostLayer(RenderGameOverlayEvent.PostLayer e) {
+		/*List<ClientTooltipComponent> list = 
+				net.minecraftforge.client.ForgeHooksClient
+				.gatherTooltipComponents(ItemStack.EMPTY, 
+						List.of(new TranslatableComponent("Hola que ase")), 
+						ItemStack.EMPTY.getTooltipImage(), 
+						100, 1000, 1000, Minecraft.getInstance().font, 
+						Minecraft.getInstance().font);
+		RenderUtils.renderTooltipInternal(e.getMatrixStack(), 
+				list, 100, 100);*/
 	}
 	
 	private static void renderPlayerHand(RenderHandEvent e) {
@@ -577,7 +659,7 @@ public class ClientEventHandler {
 				Player player = Minecraft.getInstance().player;
 				if(player == null) return;
 				
-				if (player.getMainHandItem().getItem() == ItemRegistries
+				/*if (player.getMainHandItem().getItem() == ItemRegistries
 						.connectionManipulatorWand.get()) {
 				    HitResult hitresult = mc.hitResult;
 				    if (hitresult != null && hitresult.getType() == HitResult.Type.BLOCK) {
@@ -590,12 +672,7 @@ public class ClientEventHandler {
 				         LogUtils.getLogger().info(blockstate.getBlock().getRegistryName()
 				        		 .toString());
 				    }
-					//Minecraft.getInstance().gameRenderer.getMainCamera().getBlockPosition()
-					
-					//CompoundTag nbt = player.level.getBlockEntity(player.blockPosition())
-					//		.serializeNBT();
-					//nbt.put(, nbt)
-				}
+				}*/
 			}
 		}
 	}

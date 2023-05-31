@@ -1,8 +1,11 @@
 package com.jg.evilord.utils;
 
+import com.jg.evilord.entities.block.AbstractBinderBlockEntity;
+
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.nbt.IntTag;
 import net.minecraft.nbt.Tag;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
 
 public class EnergyUtils {
@@ -25,6 +28,11 @@ public class EnergyUtils {
 
 	public static void serializeTo(EnergyStorage storage, CompoundTag mainTag) {
 		mainTag.put(ENERGY_KEY, storage.serializeNBT());
+	}
+	
+	public static void extract(int amount, boolean simulate, 
+			AbstractBinderBlockEntity<?> be) {
+		
 	}
 	
 }

@@ -2,14 +2,14 @@ package com.jg.evilord.network.server;
 
 import java.util.function.Supplier;
 
-import com.jg.evilord.container.AbstractSoulEnergyCapableContainer;
-import com.jg.evilord.entities.block.BinderBlockEntity;
+import com.jg.evilord.entities.block.AbstractBinderBlockEntity;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.item.ItemStack;
+import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.network.NetworkEvent.Context;
 
 public class CraftArtifactWithSoulsMessage {
@@ -52,8 +52,11 @@ public class CraftArtifactWithSoulsMessage {
 				player.getInventory().removeItem(msg.data[i], msg.data[i + 1]);
 			}
 			player.getInventory().add(msg.result);
-			BinderBlockEntity be = (BinderBlockEntity) player.level.getBlockEntity(msg.pos);
-			be.getSoulEnergyStorage().extractEnergy(msg.souls, false);
+			AbstractBinderBlockEntity<?> be = (AbstractBinderBlockEntity<?>) 
+					player.level.getBlockEntity(msg.pos);
+			int extracted = be.getCapability(CapabilityEnergy.ENERGY).orElse(null)
+				.extractEnergy(msg.souls, false);
+			be.onEnergyChanged(extracted, true);
 			if(player.containerMenu != null) {
 				player.containerMenu.broadcastChanges();
 			}

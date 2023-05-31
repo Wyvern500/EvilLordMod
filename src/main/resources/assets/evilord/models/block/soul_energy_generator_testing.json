@@ -1,0 +1,10 @@
+"parent": "minecraft:block/cube",
+    "textures": {
+      "particle": "evilord:block/soul_generator_test",
+      "north": "evilord:block/soul_generator_test",
+      "south": "evilord:block/soul_generator_test",
+      "east": "evilord:block/soul_generator_test",
+      "west": "evilord:block/soul_generator_test",
+      "up": "evilord:block/soul_generator_test",
+      "down": "minecraft:block/soul_generator_test"
+}

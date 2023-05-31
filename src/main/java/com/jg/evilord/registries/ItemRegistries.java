@@ -82,4 +82,12 @@ public class ItemRegistries {
 			() -> new BlockItem(BlockRegistries.artifactCrafter.get(),
 					new Item.Properties().tab(Evilord.getTab()).stacksTo(64)));
 	
+	public static final RegistryObject<BlockItem> soulStorage = ITEMS.register("soul_storage",
+			() -> new BlockItem(BlockRegistries.soulStorage.get(),
+					new Item.Properties().tab(Evilord.getTab()).stacksTo(64)));
+	
+	public static final RegistryObject<BlockItem> testGenerator = ITEMS.register("test_generator",
+			() -> new BlockItem(BlockRegistries.testGenerator.get(),
+					new Item.Properties().tab(Evilord.getTab()).stacksTo(64)));
+	
 }

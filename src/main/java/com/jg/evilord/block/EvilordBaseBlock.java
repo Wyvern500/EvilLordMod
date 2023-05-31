@@ -2,7 +2,8 @@ package com.jg.evilord.block;
 
 import javax.annotation.Nullable;
 
-import com.jg.evilord.entities.block.BinderBlockEntity;
+import com.jg.evilord.entities.block.AbstractBinderBlockEntity;
+import com.mojang.logging.LogUtils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -21,9 +22,9 @@ import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 
-public abstract class EvilordBaseBlockEntity extends BaseEntityBlock {
+public abstract class EvilordBaseBlock extends BaseEntityBlock {
 
-	protected EvilordBaseBlockEntity(Properties p_49224_) {
+	protected EvilordBaseBlock(Properties p_49224_) {
 		super(p_49224_);
 	}
 	
@@ -58,10 +59,12 @@ public abstract class EvilordBaseBlockEntity extends BaseEntityBlock {
 			boolean p_60519_) {
 		if (pState.getBlock() != pNewState.getBlock()) {
             BlockEntity blockEntity = pLevel.getBlockEntity(pPos);
-            if (blockEntity instanceof BinderBlockEntity) {
-                ((BinderBlockEntity) blockEntity).drops();
-                ((BinderBlockEntity) blockEntity).linkChanged(pState, pLevel, 
-                		pPos);
+            if (blockEntity instanceof AbstractBinderBlockEntity<?>) {
+                ((AbstractBinderBlockEntity<?>) blockEntity).drops();
+                ((AbstractBinderBlockEntity<?>) blockEntity).unbind();
+                LogUtils.getLogger().info("Unbinding");
+                /*((AbstractBinderBlockEntity<?>) blockEntity).linkChanged(pState, 
+                		pLevel, pPos);*/
             }
         }
 		super.onRemove(pState, pLevel, pPos, pNewState, p_60519_);

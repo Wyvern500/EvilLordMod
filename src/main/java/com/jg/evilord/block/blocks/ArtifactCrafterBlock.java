@@ -1,8 +1,8 @@
 package com.jg.evilord.block.blocks;
 
-import com.jg.evilord.block.EvilordBaseBlockEntity;
+import com.jg.evilord.block.EvilordBaseBlock;
 import com.jg.evilord.containers.ArtifactCrafterContainer;
-import com.jg.evilord.entities.block.ArtifactCrafterBlockEntity;
+import com.jg.evilord.entities.blockentities.ArtifactCrafterBlockEntity;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.server.level.ServerPlayer;
@@ -19,7 +19,7 @@ import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraftforge.network.NetworkHooks;
 
-public class ArtifactCrafterBlock extends EvilordBaseBlockEntity {
+public class ArtifactCrafterBlock extends EvilordBaseBlock {
 
 	public ArtifactCrafterBlock(Properties p_49224_) {
 		super(p_49224_);

@@ -1,6 +1,6 @@
 package com.jg.evilord.client.render;
 
-import com.jg.evilord.entities.block.SpellExplorerBlockEntity;
+import com.jg.evilord.entities.blockentities.SpellExplorerBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 
 import net.minecraft.client.renderer.MultiBufferSource;

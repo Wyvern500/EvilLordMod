@@ -1,6 +1,9 @@
 package com.jg.evilord.utils;
 
+import java.util.List;
+
 import com.jg.evilord.item.SoulContainerItem;
+import com.mojang.logging.LogUtils;
 
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.item.ItemStack;
@@ -16,6 +19,31 @@ public class NBTUtils {
 	
 	public static CompoundTag get(ItemStack stack) {
 		return stack.getOrCreateTag();
+	}
+	
+	public static CompoundTag intListToNbt(List<int[]> list) {
+		CompoundTag tag = new CompoundTag();
+		for(int i = 0; i < list.size(); i++) {
+			tag.putIntArray(String.valueOf(i), list.get(i));
+		}
+		return tag;
+	}
+	
+	public static CompoundTag writeInfoDataToNbt(CompoundTag tag, List<Pos> inputs, 
+			List<Pos> outputs) {
+		for(int i = 0; i < inputs.size(); i++) {
+			tag.putIntArray("input" + String.valueOf(i), inputs.get(i).pos);
+			//LogUtils.getLogger().info("i: " + i);
+		}
+		for(int i = 0; i < outputs.size(); i++) {
+			tag.putIntArray("output" + String.valueOf(i), outputs.get(i).pos);
+			//LogUtils.getLogger().info("i: " + i);
+		}
+		tag.putByte("inputs", (byte) inputs.size());
+		tag.putByte("outputs", (byte) outputs.size());
+		LogUtils.getLogger().info("inputs: " + inputs.size());
+		//LogUtils.getLogger().info("new data: " + tag.getAsString());
+		return tag;
 	}
 	
 	public static String getId(ItemStack stack) {

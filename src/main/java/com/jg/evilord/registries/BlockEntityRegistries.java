@@ -1,8 +1,10 @@
 package com.jg.evilord.registries;
 
 import com.jg.evilord.Evilord;
-import com.jg.evilord.entities.block.ArtifactCrafterBlockEntity;
-import com.jg.evilord.entities.block.SpellExplorerBlockEntity;
+import com.jg.evilord.entities.blockentities.ArtifactCrafterBlockEntity;
+import com.jg.evilord.entities.blockentities.TestGeneratorBlockEntity;
+import com.jg.evilord.entities.blockentities.SoulStorageBlockEntity;
+import com.jg.evilord.entities.blockentities.SpellExplorerBlockEntity;
 
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;
@@ -22,4 +24,14 @@ public class BlockEntityRegistries {
 			BLOCKENTITIES.register("artifact_crafter_block_entity", () -> 
 			BlockEntityType.Builder.of(ArtifactCrafterBlockEntity::new, BlockRegistries
 					.artifactCrafter.get()).build(null));
+	
+	public static final RegistryObject<BlockEntityType<SoulStorageBlockEntity>> soulStorage = 
+			BLOCKENTITIES.register("soul_storage_block_entity", () -> 
+			BlockEntityType.Builder.of(SoulStorageBlockEntity::new, BlockRegistries
+					.soulStorage.get()).build(null));
+	
+	public static final RegistryObject<BlockEntityType<TestGeneratorBlockEntity>> testGenerator = 
+			BLOCKENTITIES.register("test_generator_block_entity", () -> 
+			BlockEntityType.Builder.of(TestGeneratorBlockEntity::new, BlockRegistries
+					.testGenerator.get()).build(null));
 }

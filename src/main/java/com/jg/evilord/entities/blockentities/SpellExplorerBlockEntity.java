@@ -1,12 +1,11 @@
-package com.jg.evilord.entities.block;
+package com.jg.evilord.entities.blockentities;
 
 import javax.annotation.Nonnull;
 
 import com.jg.evilord.containers.SpellExplorerContainer;
+import com.jg.evilord.entities.block.InventoryBinderBlockEntity;
 import com.jg.evilord.entities.block.inventory.SimpleBlockEntityInventory;
 import com.jg.evilord.registries.BlockEntityRegistries;
-import com.jg.evilord.soul.energy.ISoulEnergyStorage;
-import com.jg.evilord.soul.energy.SoulEnergyStorage;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.core.BlockPos;
@@ -32,61 +31,17 @@ import net.minecraftforge.common.util.LazyOptional;
 import net.minecraftforge.items.CapabilityItemHandler;
 import net.minecraftforge.items.IItemHandler;
 
-public class SpellExplorerBlockEntity extends BinderBlockEntity {
+public class SpellExplorerBlockEntity extends InventoryBinderBlockEntity {
 
 	private static final Component CONTAINER_TITLE = new TranslatableComponent(
 			"com.jg.container.spell_explorer_container");
-	
-	private LazyOptional<IItemHandler> lazyItemHandler = LazyOptional.empty();
-	private SimpleBlockEntityInventory inv;
-	private SoulEnergyStorage soulEnergyStorage;
 
 	public SpellExplorerBlockEntity(BlockPos pos, BlockState state) {
 		this(BlockEntityRegistries.spellExplorer.get(), pos, state);
 	}
 	
 	protected SpellExplorerBlockEntity(BlockEntityType<?> type, BlockPos pos, BlockState state) {
-		super(type, pos, state);
-		this.link = null;
-		inv = new SimpleBlockEntityInventory(4);
-		this.soulEnergyStorage = new SoulEnergyStorage(100);
-	}
-
-	@Nonnull
-	@Override
-	public <T> LazyOptional<T> getCapability(@Nonnull Capability<T> cap, @javax.annotation.Nullable Direction side) {
-		if (cap == CapabilityItemHandler.ITEM_HANDLER_CAPABILITY) {
-			return lazyItemHandler.cast();
-		}
-		return super.getCapability(cap, side);
-	}
-
-	@Override
-	public void onLoad() {
-		super.onLoad();
-		lazyItemHandler = LazyOptional.of(() -> inv);
-	}
-
-	@Override
-	public void invalidateCaps() {
-		super.invalidateCaps();
-		lazyItemHandler.invalidate();
-	}
-
-	@Override
-	protected void saveAdditional(CompoundTag tag) {
-		tag.put("inventory", inv.serializeNBT());
-		tag.put("soul_energy_storage", soulEnergyStorage.serializeNBT());
-		tag.putString(LINK, link);
-		super.saveAdditional(tag);
-	}
-	
-	@Override
-	public void load(CompoundTag nbt) {
-		super.load(nbt);
-		inv.deserializeNBT(nbt.getCompound("inventory"));
-		soulEnergyStorage.deserializeNBT(nbt.getCompound("soul_energy_storage"));
-		link = nbt.getString(LINK);
+		super(type, pos, state, 100, 4, 1, 1);
 	}
 	
 	@Override
@@ -132,51 +87,7 @@ public class SpellExplorerBlockEntity extends BinderBlockEntity {
 	}
 
 	@Override
-	public int getContainerSize() {
-		return inv.getSize();
-	}
-
-	@Override
-	public boolean isEmpty() {
-		return inv.isEmpty();
-	}
-
-	@Override
-	public ItemStack getItem(int p_18941_) {
-		return inv.getItem(p_18941_);
-	}
-
-	@Override
-	public ItemStack removeItem(int p_18942_, int p_18943_) {
-		return inv.removeItem(p_18942_, p_18943_);
-	}
-
-	@Override
-	public ItemStack removeItemNoUpdate(int p_18951_) {
-		return inv.removeItemNoUpdate(p_18951_);
-	}
-
-	@Override
-	public void setItem(int p_18944_, ItemStack p_18945_) {
-		inv.setItem(p_18944_, p_18945_);
-	}
-
-	@Override
-	public boolean stillValid(Player player) {
-		if (this.isRemoved()) {
-			return false;
-		} else {
-			return !(worldPosition.distSqr(player.blockPosition()) > 64.0D);
-		}
-	}
-	
-	@Override
-	public void clearContent() {
-		inv.clearContent();
-	}
-
-	@Override
-	protected Component getDefaultName() {
+	public Component getDisplayName() {
 		return CONTAINER_TITLE;
 	}
 
@@ -186,13 +97,8 @@ public class SpellExplorerBlockEntity extends BinderBlockEntity {
 	}
 
 	@Override
-	protected AbstractContainerMenu createMenu(int id, Inventory inv) {
-		return new SpellExplorerContainer(id, inv, this);
-	}
-
-	@Override
 	public void linkChanged(BlockState state, Level level, BlockPos pos) {
-		String[] sData = serializeNBT().getString(LINK).split(",");
+		/*String[] sData = serializeNBT().getString(LINK).split(",");
 		if(sData.length == 0) return;
 		if(sData[0].equals("")) return;
 		BlockPos bePos = new BlockPos(Integer.parseInt(sData[0]), Integer.parseInt(sData[1]),
@@ -200,7 +106,7 @@ public class SpellExplorerBlockEntity extends BinderBlockEntity {
 		BlockEntity be = level.getBlockEntity(bePos);
 		if(be != null) {
 			((BinderBlockEntity)be).unbind();
-		}
+		}*/
 	}
 
 	@Override
@@ -214,8 +120,14 @@ public class SpellExplorerBlockEntity extends BinderBlockEntity {
 	}
 
 	@Override
-	public ISoulEnergyStorage getSoulEnergyStorage() {
-		return soulEnergyStorage;
+	public AbstractContainerMenu createMenu(int id, Inventory inv, Player player) {
+		return new SpellExplorerContainer(id, inv, this);
+	}
+
+	@Override
+	public void onEnergyChanged(int energy, boolean extracted) {
+		// TODO Auto-generated method stub
+		
 	}
 
 }

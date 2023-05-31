@@ -1,0 +1,12 @@
+{
+    "parent": "minecraft:block/cube",
+    "textures": {
+      "particle": "evilord:block/soul_storage",
+      "north": "evilord:block/soul_storage",
+      "south": "evilord:block/soul_storage",
+      "east": "evilord:block/soul_storage",
+      "west": "evilord:block/soul_storage",
+      "up": "evilord:block/soul_storage",
+      "down": "evilord:block/soul_storage"
+    }
+  }
