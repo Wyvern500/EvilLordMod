@@ -10,7 +10,6 @@ import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.client.gui.GuiComponent;
-import net.minecraft.client.gui.components.AbstractWidget;
 import net.minecraft.client.gui.components.Widget;
 import net.minecraft.client.gui.components.events.GuiEventListener;
 import net.minecraft.client.gui.narration.NarratableEntry;
@@ -212,6 +211,11 @@ public class JgListWidget<T extends com.jg.evilord.client.screens.widgets.JgList
 			return items.get(selected);
 		}
 		return null;
+	}
+	
+	public void select(int index) {
+		this.selected = index;
+        items.get(index).onClick(0, 0, index);
 	}
 	
 	public RenderableInfo getSliderRenderInfo() {

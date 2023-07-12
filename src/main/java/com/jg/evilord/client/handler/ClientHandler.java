@@ -1,20 +1,16 @@
 package com.jg.evilord.client.handler;
 
-import java.util.List;
-
 import com.jg.evilord.animation.model.JgModel;
 import com.jg.evilord.animation.model.JgModelPart;
 import com.jg.evilord.animation.model.ModelsHandler;
 import com.jg.evilord.spell.Spell;
 import com.jg.evilord.spell.handler.SpellsHandler;
-import com.jg.evilord.utils.RenderUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.player.LocalPlayer;
 import net.minecraft.client.renderer.MultiBufferSource;
-import net.minecraft.network.chat.TranslatableComponent;
 import net.minecraft.resources.ResourceLocation;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.Item;

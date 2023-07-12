@@ -2,16 +2,12 @@ package com.jg.evilord.registries;
 
 import com.jg.evilord.Evilord;
 import com.jg.evilord.containers.ArtifactCrafterContainer;
-import com.jg.evilord.containers.TestGeneratorContainer;
 import com.jg.evilord.containers.SoulManipulatorContainer;
 import com.jg.evilord.containers.SoulStorageContainer;
 import com.jg.evilord.containers.SpellExplorerContainer;
-import com.mojang.logging.LogUtils;
+import com.jg.evilord.containers.TestGeneratorContainer;
 
-import net.minecraft.network.FriendlyByteBuf;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraftforge.common.extensions.IForgeMenuType;
 import net.minecraftforge.network.IContainerFactory;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;

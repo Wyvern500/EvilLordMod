@@ -2,9 +2,9 @@ package com.jg.evilord.registries;
 
 import com.jg.evilord.Evilord;
 import com.jg.evilord.entities.blockentities.ArtifactCrafterBlockEntity;
-import com.jg.evilord.entities.blockentities.TestGeneratorBlockEntity;
 import com.jg.evilord.entities.blockentities.SoulStorageBlockEntity;
 import com.jg.evilord.entities.blockentities.SpellExplorerBlockEntity;
+import com.jg.evilord.entities.blockentities.TestGeneratorBlockEntity;
 
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraftforge.registries.DeferredRegister;

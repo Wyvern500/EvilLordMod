@@ -5,7 +5,6 @@ import com.jg.evilord.entities.block.AbstractBinderBlockEntity;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.MenuType;
-import net.minecraft.world.level.block.entity.BlockEntity;
 
 public abstract class AbstractSoulEnergyCapableContainer<T extends AbstractBinderBlockEntity<?>> extends AbstractContainerMenu {
 	

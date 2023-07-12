@@ -1,12 +1,9 @@
 package com.jg.evilord.containers;
 
-import java.io.IOException;
-
 import com.jg.evilord.container.AbstractSoulEnergyCapableContainer;
 import com.jg.evilord.entities.blockentities.ArtifactCrafterBlockEntity;
 import com.jg.evilord.registries.ContainerRegistries;
 import com.jg.evilord.utils.Pos;
-import com.mojang.logging.LogUtils;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
@@ -14,7 +11,6 @@ import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
-import net.minecraft.world.level.Level;
 
 public class ArtifactCrafterContainer extends AbstractSoulEnergyCapableContainer<ArtifactCrafterBlockEntity> {
 	

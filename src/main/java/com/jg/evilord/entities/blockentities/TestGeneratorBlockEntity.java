@@ -3,7 +3,6 @@ package com.jg.evilord.entities.blockentities;
 import com.jg.evilord.containers.TestGeneratorContainer;
 import com.jg.evilord.entities.block.MenuBinderBlockEntity;
 import com.jg.evilord.registries.BlockEntityRegistries;
-import com.jg.evilord.soul.link.SoulLink;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;

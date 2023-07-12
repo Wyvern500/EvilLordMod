@@ -10,8 +10,6 @@ import com.jg.evilord.client.helpers.Timer;
 import com.jg.evilord.network.client.ShowInfoBlocksMessage;
 import com.jg.evilord.network.server.ProcessConnectionManipulatorWandMessage;
 import com.jg.evilord.registries.ItemRegistries;
-import com.jg.evilord.utils.MessageUtils;
-import com.jg.evilord.utils.Pos;
 import com.jg.evilord.utils.RenderUtils;
 import com.mojang.blaze3d.vertex.PoseStack;
 import com.mojang.logging.LogUtils;

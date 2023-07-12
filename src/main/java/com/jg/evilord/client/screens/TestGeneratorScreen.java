@@ -2,10 +2,7 @@ package com.jg.evilord.client.screens;
 
 import com.jg.evilord.Evilord;
 import com.jg.evilord.containers.TestGeneratorContainer;
-import com.jg.evilord.entities.block.AbstractBinderBlockEntity;
-import com.jg.evilord.entities.blockentities.TestGeneratorBlockEntity;
 import com.jg.evilord.network.server.MergeSoulEnergyMessage;
-import com.jg.evilord.soul.link.SoulLink;
 import com.mojang.blaze3d.systems.RenderSystem;
 import com.mojang.blaze3d.vertex.PoseStack;
 

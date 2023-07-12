@@ -21,11 +21,16 @@ import net.minecraft.world.item.ItemStack;
 public class RecipeHandler {
 
 	private Map<String, EvilordRecipe> recipes; 
-	private String key;
+	private CraftingTab tab;
 	
-	public RecipeHandler(String key) {
+	public RecipeHandler(CraftingTab tab) {
 		this.recipes = new HashMap<>();
-		this.key = key;
+		this.tab = tab;
+	}
+	
+	public RecipeHandler(String key, Item item) {
+		this.recipes = new HashMap<>();
+		this.tab = new CraftingTab(key, () -> item);
 	}
 	
 	public EvilordRecipe getRecipe(Item item) {
@@ -142,8 +147,8 @@ public class RecipeHandler {
 		return recipes;
 	}
 	
-	public String getKey() {
-		return key;
+	public CraftingTab getTab() {
+		return tab;
 	}
 	
 	public static class RecipeResultData {

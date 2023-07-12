@@ -3,8 +3,6 @@ package com.jg.evilord.soul.link;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
-import java.util.function.Function;
-import java.util.stream.Collectors;
 
 import com.jg.evilord.utils.Pos;
 import com.mojang.logging.LogUtils;

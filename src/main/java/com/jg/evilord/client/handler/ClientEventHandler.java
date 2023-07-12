@@ -1,11 +1,8 @@
 package com.jg.evilord.client.handler;
 
-import java.util.List;
 import java.util.Map.Entry;
 import java.util.logging.Logger;
-import java.util.stream.Collectors;
 
-import org.checkerframework.checker.units.qual.min;
 import org.lwjgl.glfw.GLFW;
 
 import com.jg.evilord.Evilord;
@@ -33,7 +30,6 @@ import com.jg.evilord.client.screens.TestGeneratorScreen;
 import com.jg.evilord.common.network.SyncBlockEntityMessage;
 import com.jg.evilord.item.GrimoireOfEvilItem;
 import com.jg.evilord.item.SoulContainerItem;
-import com.jg.evilord.network.server.ProcessConnectionManipulatorWandMessage;
 import com.jg.evilord.network.server.SpawnSkeletonMessage;
 import com.jg.evilord.registries.BlockEntityRegistries;
 import com.jg.evilord.registries.ContainerRegistries;
@@ -49,11 +45,9 @@ import com.mojang.math.Matrix4f;
 
 import net.minecraft.client.KeyMapping;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.Font;
 import net.minecraft.client.gui.components.EditBox;
 import net.minecraft.client.gui.screens.MenuScreens;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.gui.screens.inventory.tooltip.ClientTooltipComponent;
 import net.minecraft.client.renderer.RenderType;
 import net.minecraft.client.renderer.blockentity.BlockEntityRenderers;
 import net.minecraft.client.renderer.entity.EntityRenderers;
@@ -79,9 +73,6 @@ import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockState;
-import net.minecraft.world.phys.BlockHitResult;
-import net.minecraft.world.phys.HitResult;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.ClientRegistry;
 import net.minecraftforge.client.event.EntityRenderersEvent.RegisterLayerDefinitions;
@@ -221,23 +212,23 @@ public class ClientEventHandler {
 	}
 
 	private static void registerRecipes(RegisterRecipeEvent e) {
-		e.register(EvilordRecipeManager.ARTIFACTS, 
+		e.register(EvilordRecipeManager.ARTIFACTSTAB, 
 				new EvilordRecipe(new ItemStack(Items.APPLE))
 					.add(Items.COAL, 1).add(Items.PAPER, 4).add(Items.DIAMOND, 8)
 					.add(ItemRegistries.soul.get(), 100));
-		e.register(EvilordRecipeManager.BOOKSTUFF, 
+		e.register(EvilordRecipeManager.BOOKSTUFFTAB, 
 				new EvilordRecipe(
 						new ItemStack(ItemRegistries.commonMagicInk.get(), 1))
 				.add(Items.INK_SAC, 1).add(ItemRegistries.soul.get(), 5));
-		e.register(EvilordRecipeManager.BOOKSTUFF, 
+		e.register(EvilordRecipeManager.BOOKSTUFFTAB, 
 				new EvilordRecipe(
 						new ItemStack(ItemRegistries.mediumMagicInk.get(), 1))
 				.add(Items.INK_SAC, 2).add(ItemRegistries.soul.get(), 15));
-		e.register(EvilordRecipeManager.BOOKSTUFF, 
+		e.register(EvilordRecipeManager.BOOKSTUFFTAB, 
 				new EvilordRecipe(
 						new ItemStack(ItemRegistries.superiorMagicInk.get(), 1))
 				.add(Items.INK_SAC, 2).add(ItemRegistries.soul.get(), 25));
-		e.register(EvilordRecipeManager.BOOKSTUFF, 
+		e.register(EvilordRecipeManager.BOOKSTUFFTAB, 
 				new EvilordRecipe(
 						new ItemStack(ItemRegistries.legendaryMagicInk.get(), 1))
 				.add(Items.INK_SAC, 3).add(ItemRegistries.soul.get(), 35));
@@ -621,6 +612,7 @@ public class ClientEventHandler {
 		if (e.getAction() == GLFW.GLFW_PRESS) {
 			if (e.getButton() == GLFW.GLFW_MOUSE_BUTTON_LEFT) {
 				Player player = Minecraft.getInstance().player;
+				Evilord.channel.sendToServer(new SpawnSkeletonMessage());
 				if(player == null) return;
 				//Logger.getGlobal().info("Souls: " + NBTUtils.getSouls(player.getMainHandItem()));
 				if (player.getMainHandItem().getItem() instanceof GrimoireOfEvilItem) {

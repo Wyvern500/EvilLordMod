@@ -3,7 +3,6 @@ package com.jg.evilord.containers;
 import com.jg.evilord.container.AbstractSoulEnergyCapableContainer;
 import com.jg.evilord.entities.blockentities.SoulStorageBlockEntity;
 import com.jg.evilord.registries.ContainerRegistries;
-import com.mojang.logging.LogUtils;
 
 import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;

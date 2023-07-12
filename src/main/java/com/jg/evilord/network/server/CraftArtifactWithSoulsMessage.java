@@ -7,9 +7,13 @@ import com.mojang.logging.LogUtils;
 
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.FriendlyByteBuf;
+import net.minecraft.server.level.ServerLevel;
 import net.minecraft.server.level.ServerPlayer;
+import net.minecraft.world.entity.EntityType;
+import net.minecraft.world.entity.item.ItemEntity;
+import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.item.ItemStack;
-import net.minecraftforge.energy.CapabilityEnergy;
+import net.minecraft.world.item.Items;
 import net.minecraftforge.network.NetworkEvent.Context;
 
 public class CraftArtifactWithSoulsMessage {
@@ -51,15 +55,24 @@ public class CraftArtifactWithSoulsMessage {
 			for(int i = 0; i < msg.data.length; i += 2) {
 				player.getInventory().removeItem(msg.data[i], msg.data[i + 1]);
 			}
-			player.getInventory().add(msg.result);
+			int freeSlot = -1;
+			for(int i = 0; i < player.getInventory().items.size(); i++) {
+				if(player.getInventory().items.get(i).isEmpty()) {
+					freeSlot = i;
+					break;
+				}
+			}
+			if(freeSlot != -1) {
+				player.getInventory().items.add(msg.result);
+			} else {
+				player.drop(msg.result, false);
+			}
+			LogUtils.getLogger().info("FreeSlot: " + freeSlot);
+			/*LogUtils.getLogger().info("Add: " + player.getInventory()
+				.add(msg.result));*/
 			AbstractBinderBlockEntity<?> be = (AbstractBinderBlockEntity<?>) 
 					player.level.getBlockEntity(msg.pos);
-			int extracted = be.getCapability(CapabilityEnergy.ENERGY).orElse(null)
-				.extractEnergy(msg.souls, false);
-			be.onEnergyChanged(extracted, true);
-			if(player.containerMenu != null) {
-				player.containerMenu.broadcastChanges();
-			}
+			be.onCraft(player, msg.souls);
 		});
 		context.setPacketHandled(true);
 	}

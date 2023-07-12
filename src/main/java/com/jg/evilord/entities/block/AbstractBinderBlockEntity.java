@@ -11,6 +11,7 @@ import com.mojang.logging.LogUtils;
 import net.minecraft.core.BlockPos;
 import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
+import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.inventory.ContainerData;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.entity.BlockEntity;
@@ -169,6 +170,14 @@ public abstract class AbstractBinderBlockEntity<T extends BlockEntity> extends B
 	
 	public void onInputChange(EnergyStorage storage, AbstractBinderBlockEntity<?> be) {
 		
+	}
+	
+	public void onCraft(ServerPlayer player, int souls) {
+		int extracted = energyStorage.extractEnergy(souls, false);
+		onEnergyChanged(extracted, true);
+		if(player.containerMenu != null) {
+			player.containerMenu.broadcastChanges();
+		}
 	}
 	
 	public abstract void onEnergyChanged(int energy, boolean extracted);

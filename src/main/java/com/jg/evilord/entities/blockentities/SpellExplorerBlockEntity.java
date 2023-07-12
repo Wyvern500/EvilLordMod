@@ -1,15 +1,11 @@
 package com.jg.evilord.entities.blockentities;
 
-import javax.annotation.Nonnull;
-
 import com.jg.evilord.containers.SpellExplorerContainer;
 import com.jg.evilord.entities.block.InventoryBinderBlockEntity;
-import com.jg.evilord.entities.block.inventory.SimpleBlockEntityInventory;
 import com.jg.evilord.registries.BlockEntityRegistries;
 import com.mojang.logging.LogUtils;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.nbt.CompoundTag;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
@@ -21,15 +17,9 @@ import net.minecraft.world.Containers;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
-import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.capabilities.Capability;
-import net.minecraftforge.common.util.LazyOptional;
-import net.minecraftforge.items.CapabilityItemHandler;
-import net.minecraftforge.items.IItemHandler;
 
 public class SpellExplorerBlockEntity extends InventoryBinderBlockEntity {
 

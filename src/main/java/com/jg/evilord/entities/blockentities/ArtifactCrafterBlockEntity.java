@@ -1,34 +1,30 @@
 package com.jg.evilord.entities.blockentities;
 
+import java.util.Arrays;
+
 import com.jg.evilord.containers.ArtifactCrafterContainer;
 import com.jg.evilord.entities.block.AbstractBinderBlockEntity;
+import com.jg.evilord.entities.block.ICrafterBlockEntity;
 import com.jg.evilord.entities.block.MenuBinderBlockEntity;
 import com.jg.evilord.registries.BlockEntityRegistries;
-import com.jg.evilord.registries.ContainerRegistries;
 import com.jg.evilord.utils.Pos;
 import com.mojang.logging.LogUtils;
 
-import io.netty.buffer.ByteBuf;
 import net.minecraft.core.BlockPos;
 import net.minecraft.nbt.CompoundTag;
-import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.network.chat.Component;
 import net.minecraft.network.chat.TranslatableComponent;
-import net.minecraft.network.protocol.Packet;
-import net.minecraft.network.protocol.game.ClientGamePacketListener;
 import net.minecraft.server.level.ServerPlayer;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.state.BlockState;
-import net.minecraftforge.common.ForgeHooks;
 import net.minecraftforge.energy.CapabilityEnergy;
 import net.minecraftforge.energy.EnergyStorage;
 
-public class ArtifactCrafterBlockEntity extends MenuBinderBlockEntity {
+public class ArtifactCrafterBlockEntity extends MenuBinderBlockEntity implements ICrafterBlockEntity {
 	
 	private int soulEnergy;
 	
@@ -70,6 +66,39 @@ public class ArtifactCrafterBlockEntity extends MenuBinderBlockEntity {
 	@Override
 	public void linkChanged(BlockState pState, Level pLevel, BlockPos pPos) {
 		
+	}
+	
+	@Override
+	public void onCraft(ServerPlayer player, int souls) {
+		extractEnergyOnInputs(souls);
+		onEnergyChanged(souls, true);
+		if(player.containerMenu != null) {
+			player.containerMenu.broadcastChanges();
+		}
+		calculateEnergy();
+	}
+	
+	@Override
+	public boolean canCraft(Player player) {
+		return true;
+	}
+	
+	private void extractEnergyOnInputs(int souls) {
+		int remaining = souls;
+		for(Pos pos : links.getInputs()) {
+			if(!pos.isEmpty()) {
+				if(remaining > 0) {
+					int extracted = level.getBlockEntity(pos.toBlockPos())
+						.getCapability(CapabilityEnergy.ENERGY).orElse(null)
+						.extractEnergy(remaining, false);
+					remaining -= extracted;
+					LogUtils.getLogger().info("extracting at " + Arrays
+							.toString(pos.pos));
+				} else {
+					break;
+				}
+			}
+		}
 	}
 	
 	@Override

@@ -1,7 +1,6 @@
 package com.jg.evilord.containers;
 
 import com.jg.evilord.container.AbstractSoulEnergyCapableContainer;
-import com.jg.evilord.entities.blockentities.ArtifactCrafterBlockEntity;
 import com.jg.evilord.entities.blockentities.TestGeneratorBlockEntity;
 import com.jg.evilord.registries.ContainerRegistries;
 
@@ -9,7 +8,6 @@ import net.minecraft.network.FriendlyByteBuf;
 import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.inventory.ContainerData;
-import net.minecraft.world.inventory.MenuType;
 import net.minecraft.world.inventory.SimpleContainerData;
 import net.minecraft.world.inventory.Slot;
 

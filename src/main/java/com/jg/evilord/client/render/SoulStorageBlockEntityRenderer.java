@@ -1,6 +1,5 @@
 package com.jg.evilord.client.render;
 
-import com.jg.evilord.entities.blockentities.ArtifactCrafterBlockEntity;
 import com.jg.evilord.entities.blockentities.SoulStorageBlockEntity;
 import com.mojang.blaze3d.vertex.PoseStack;
 

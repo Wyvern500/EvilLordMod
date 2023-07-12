@@ -2,7 +2,6 @@ package com.jg.evilord.entities.block;
 
 import javax.annotation.Nonnull;
 
-import com.jg.evilord.container.inventory.SimpleInventory;
 import com.jg.evilord.entities.block.inventory.SimpleBlockEntityInventory;
 
 import net.minecraft.core.BlockPos;
@@ -11,9 +10,7 @@ import net.minecraft.nbt.CompoundTag;
 import net.minecraft.world.Container;
 import net.minecraft.world.Containers;
 import net.minecraft.world.MenuProvider;
-import net.minecraft.world.entity.player.Inventory;
 import net.minecraft.world.entity.player.Player;
-import net.minecraft.world.inventory.AbstractContainerMenu;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
