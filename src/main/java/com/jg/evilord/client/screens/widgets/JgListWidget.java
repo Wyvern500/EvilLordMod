@@ -228,19 +228,19 @@ public class JgListWidget<T extends com.jg.evilord.client.screens.widgets.JgList
 	
 	public static abstract class JgListKey extends GuiComponent {
 		
-		ResourceLocation res;
+		protected boolean pressed; 
 		
 		public JgListKey() {
 			
 		}
 
-		public void setRes(ResourceLocation res) {
-			this.res = res;
+		public void superOnClick(double mx, double my, int index) {
+			pressed = true;
 		}
 		
-		public abstract void onClick(double mx, double my, int index);
-		
-		public abstract void onUnselect(double mx, double my, int index);
+		public void superOnUnselect(double mx, double my, int index) {
+			pressed = false;
+		}
 		
 		public abstract void render(PoseStack matrix, int x, int y, 
 				int mouseX, int mouseY, int index, boolean selected);
